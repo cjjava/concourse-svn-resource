@@ -66,7 +66,18 @@ process.stdin.on("data", stdin => {
     
     // TODO: urlencode
     cmdLine += ' "' + repository + '"';
-    exec(cmdLine, {cwd: destDir}, (err, stdout, stderr) => {
+
+    let options = {
+	cwd: destDir,
+	maxBuffer: 8192*1024,
+	env: {
+	    LANG: "en_US.UTF-8",
+	    LANGUAGE: "en_US:en",
+	    LC_ALL: "en_US.UTF-8"
+	}
+    };
+
+    exec(cmdLine, options, (err, stdout, stderr) => {
         if (stderr && stderr !== "") {
             fail(new Error(stderr));
         }

@@ -56,8 +56,17 @@ process.stdin.on("data", stdin => {
     
     // TODO: encode
     cmdLine += ' "' + repository + '"';
-    
-    exec(cmdLine, (err, stdout, stderr) => {
+   
+    let options = {
+	maxBuffer: 8192*1024,
+	env: {
+	    LANG: "en_US.UTF-8",
+	    LANGUAGE: "en_US:en",
+	    LC_ALL: "en_US.UTF-8"
+	}
+    };
+
+    exec(cmdLine, options, (err, stdout, stderr) => {
         if (err) fail(err);
         const parser = new xml2js.Parser({
             explicitRoot: false
