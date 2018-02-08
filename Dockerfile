@@ -1,5 +1,5 @@
-FROM node:5
-MAINTAINER "William Matthews" robophred@gmail.com
+FROM node:6
+MAINTAINER "Masaki TAKANO" takano@liberent.co.jp
 
 WORKDIR /opt/resource
 COPY check.js check
@@ -18,4 +18,3 @@ RUN apt-get update --yes && \
     npm install --quiet
 
 RUN chmod a+x check in out
-

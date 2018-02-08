@@ -12,12 +12,11 @@ exports.fail = function fail(err, cmd) {
     if (err) {
         console.error(filter_hidden(err.stack));
     }
-    process.exit(1);
+    process.exitCode = 1;
 }
 
 exports.success = function success(result) {
     console.log(prettyJson(result));
-    process.exit(0);
 }
 
 

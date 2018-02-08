@@ -58,12 +58,12 @@ process.stdin.on("data", stdin => {
     cmdLine += ' "' + repository + '"';
    
     let options = {
-	maxBuffer: 8192*1024,
-	env: {
-	    LANG: "en_US.UTF-8",
-	    LANGUAGE: "en_US:en",
-	    LC_ALL: "en_US.UTF-8"
-	}
+        maxBuffer: Infinity,
+        env: {
+            LANG: "ja_JP.UTF-8",
+            LANGUAGE: "ja_JP:ja",
+            LC_ALL: "ja_JP.UTF-8"
+        }
     };
 
     exec(cmdLine, options, (err, stdout, stderr) => {
