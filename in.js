@@ -91,27 +91,17 @@ process.stdin.on("data", stdin => {
         if (lines.length <= 1) {
             fail(new Error("no output from svn checkout"), cmdLine);
         }
-        
-        // "Checked out revision 47830."
-        // TODO: Regex me this, batman
-        // Might want to just svn status on the new dir, since that will get us metadata as well.
-        const revLine = lines[lines.length - 2];
-        const header = "Checked out revision ";
-        if (revLine.substr(0, header.length) !== header) {
-            fail(new Error('unexpected svn output.  expected revision, got "' + lines.slice(lines.length - 5).join("\n") + '"'), cmdLine);
-        }
-        
-        const rev = revLine.substr(header.length, revLine.length - header.length - 1);
-        success({
-            "version": {
-                "revision": rev
-            },
-            // TODO: Metadata.  We may want to do an svn info to get this. 
-            // metadata: {
-            //     author: entry["author"][0],
-            //     date: entry["date"][0],
-            //     msg: entry["msg"][0]
-            // }
+
+        var dirName = repository.split("/").pop();
+        exec(`svn info --show-item revision ${dirName}`, options, (err, stdout, stderr) => {
+            if (err) {
+                return fail(err, cmdLine);
+            }
+            success({
+                "version": {
+                    "revision": parseInt(stdout)
+                },
+            });
         });
     });
 });

@@ -88,20 +88,17 @@ process.stdin.on("data", stdin => {
         if (lines.length <= 1) {
             fail(new Error("no output from svn commit"));
         }
-        
-        // TODO: Regex me this, batman
-        // Might want to just svn status on the new dir, since that will get us metadata as well.
-        const revLine = lines[lines.length - 2];
-        const header = "Committed revision ";
-        if (revLine.substr(0, header.length) !== header) {
-            fail(new Error('unexpected svn output.  expected revision, got "' + lines.slice(lines.length - 5).join("\n") + '"'));
-        }
-        
-        const rev = revLine.substr(header.length, revLine.length - header.length - 1);
-        success({
-            "version": {
-                "revision": rev
+
+        var dirName = repository.split("/").pop();
+        exec(`svn info --show-item revision ${dirName}`, options, (err, stdout, stderr) => {
+            if (err) {
+                return fail(err, cmdLine);
             }
+            success({
+                "version": {
+                    "revision": parseInt(stdout)
+                },
+            });
         });
     });
 });
