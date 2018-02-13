@@ -29,11 +29,16 @@ process.stdin.on("data", stdin => {
     const username = source.username || null;
     const password = source.password || null;
     const trustCert = source["trust_server_cert"];
-    
+    const check_only = source.check_only || false;
+
     if (!repository) {
         fail(new Error("source.repository must be provided"));
     }
-    
+
+    if (check_only) {
+        return success({});
+    }
+
     let revision = null;
     if (typeof data.version === 'object' && data.version != null) {
         const revisionType = typeof data.version.revision;

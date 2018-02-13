@@ -30,6 +30,7 @@ process.stdin.on("data", stdin => {
     const username = source.username || null;
     const password = source.password || null;
     const trustCert = source["trust_server_cert"];
+    const check_only = source.check_only || false;
     
     const params = data.params || {};
     const message = params.message || null;
@@ -37,7 +38,11 @@ process.stdin.on("data", stdin => {
     if (!repository) {
         fail(new Error("source.repository must be provided"));
     }
-    
+
+    if (check_only) {
+        return success({});
+    }
+
     // TODO: Are we always going to have a working directory here?
     //  We can attempt to push changes outside of a working copy by doing a checkout with --depth=empty in this dir.
     
