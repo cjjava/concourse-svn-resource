@@ -40,7 +40,7 @@ process.stdin.on("data", stdin => {
     }
 
     if (check_only) {
-        return success({});
+        return success({"version":{"ref":"none"}});
     }
 
     // TODO: Are we always going to have a working directory here?

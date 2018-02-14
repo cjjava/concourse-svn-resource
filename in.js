@@ -36,7 +36,7 @@ process.stdin.on("data", stdin => {
     }
 
     if (check_only) {
-        return success({});
+        return success({"version":{"ref":"none"}});
     }
 
     let revision = null;
