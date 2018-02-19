@@ -9,6 +9,7 @@ const shared = require("./shared");
 const success = shared.success;
 const fail = shared.fail;
 const hide = shared.hide;
+const getLatestVersion = shared.getLatestVersion;
 
 //node in.js /path
 if (process.argv.length < 3) {
@@ -36,7 +37,7 @@ process.stdin.on("data", stdin => {
     }
 
     if (check_only) {
-        return success({"version":{"ref":"none"}});
+        return getLatestVersion(data);
     }
 
     let revision = null;
@@ -98,13 +99,13 @@ process.stdin.on("data", stdin => {
         }
 
         var dirName = repository.split("/").pop();
-        exec(`svn info --show-item revision ${dirName}`, options, (err, stdout, stderr) => {
+        exec(`svn info ${dirName} | grep '^リビジョン:' | cut -d ':' -f2`, options, (err, stdout, stderr) => {
             if (err) {
                 return fail(err, cmdLine);
             }
             success({
                 "version": {
-                    "revision": parseInt(stdout)
+                    "revision": `${parseInt(stdout)}`
                 },
             });
         });
